@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/test_logger.dir/tests/test_logger.c.o -o test_logger  libnas-daemon.a 

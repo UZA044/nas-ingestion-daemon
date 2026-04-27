@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.10)
+  project(NasIngestionDaemon C)
+
+  # ---- options -------------------------------------------------
+  set(CMAKE_C_STANDARD 11)
+  set(CMAKE_C_STANDARD_REQUIRED ON)
+
+  # ---- library (the daemon core) --------------------------------
+  add_library(nas-daemon
+      src/logger.c
+      # you will add other .c files here as you implement them
+  )
+
+  target_include_directories(nas-daemon PUBLIC
+      ${CMAKE_CURRENT_SOURCE_DIR}/include
+  )
+
+  # ---- test executable -------------------------------------------
+  add_executable(test_logger
+      tests/test_logger.c          # you will create this file
+  )
+
+  target_link_libraries(test_logger PRIVATE nas-daemon)
+
+  # Optional: enable warnings
+  if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+      target_compile_options(test_logger PRIVATE -Wall -Wextra -pedantic)
+  endif()

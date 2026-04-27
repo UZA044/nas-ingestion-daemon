@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnas-daemon.a "CMakeFiles/nas-daemon.dir/src/logger.c.o"
+/usr/bin/ranlib libnas-daemon.a

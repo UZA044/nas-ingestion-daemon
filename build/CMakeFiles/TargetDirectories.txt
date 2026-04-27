@@ -1,0 +1,4 @@
+/home/srv_admin/development_work/CDevWork/nas-ingestion-daemon/build/CMakeFiles/nas-daemon.dir
+/home/srv_admin/development_work/CDevWork/nas-ingestion-daemon/build/CMakeFiles/test_logger.dir
+/home/srv_admin/development_work/CDevWork/nas-ingestion-daemon/build/CMakeFiles/edit_cache.dir
+/home/srv_admin/development_work/CDevWork/nas-ingestion-daemon/build/CMakeFiles/rebuild_cache.dir
