@@ -11,6 +11,6 @@ void log_write(LogLevel level, const char* format, ...);
 
 void log_set_level(LogLevel level);
 
-void log_close();
+void log_close(void);
 
 #endif // LOGGER_H
