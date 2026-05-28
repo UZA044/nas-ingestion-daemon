@@ -82,8 +82,8 @@ int main(void)
         _exit(0);
     }
 
-    /* Parent: run watcher — child creates file, then sends SIGTERM.
-       watcher_start returns on SIGTERM. */
+    
+    signal(SIGTERM, watcher_signal_handler);
     watcher_start();
 
     waitpid(child, NULL, 0);

@@ -15,6 +15,8 @@ static volatile sig_atomic_t g_running = 1;
 void watcher_signal_handler(int sig){
     (void)sig;
     g_running = 0;
+    log_write(LOG_INFO, " A signal was detected to terminate the program - about to start this. ");
+
 }
 
 bool watcher_init(const char *path){
