@@ -1,11 +1,7 @@
 #include "config.h"
 #include "logger.h"
+#include "watcher.h"
 #include <signal.h>
-
-void watcher_signal_handler(int sig){
-    log_write(LOG_INFO, " A signal was detected to terminate the program - about to start this. ");
-    exit(sig);
-};
 
 int main(){
     log_init("nas-daemon", LOG_PID | LOG_NDELAY, LOG_DAEMON);
@@ -33,4 +29,4 @@ int main(){
       config_free();
       log_close();
       return 0;
-};
+}
