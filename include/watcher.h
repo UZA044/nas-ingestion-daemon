@@ -7,7 +7,7 @@
 
 #define BUF_LEN (1024 * (sizeof(struct inotify_event) + NAME_MAX + 1))
 
-bool watcher_init(const char *path);
+bool watcher_init(const char *path, const Config *config);
 void watcher_start(void);
 void watcher_stop(void);
 void watcher_signal_handler(int sig);

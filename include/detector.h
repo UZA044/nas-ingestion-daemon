@@ -8,4 +8,6 @@ typedef enum {
 
 FileType detector_identify(const char *path);
 
+const char* map_file_type_dir(FileType type, const Config *cfg);
+
 #endif // DETECTOR_H

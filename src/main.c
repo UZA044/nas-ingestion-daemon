@@ -1,7 +1,7 @@
 #include "config.h"
 #include "logger.h"
-#include "watcher.h"
 #include <signal.h>
+#include "watcher.h"
 
 int main(){
     log_init("nas-daemon", LOG_PID | LOG_NDELAY, LOG_DAEMON);
@@ -15,7 +15,7 @@ int main(){
 
     signal(SIGTERM, watcher_signal_handler);
 
-    if (!watcher_init(cfg->paths.watch_dir)) {
+    if (!watcher_init(cfg->paths.watch_dir, cfg)) {
         log_write(LOG_ERR, "Failed to start watcher");
         config_free();
         log_close();
@@ -23,10 +23,10 @@ int main(){
     }
     log_write(LOG_INFO, "Daemon started, watching %s", cfg->paths.watch_dir);
 
-      watcher_start();
+    watcher_start();
 
-      watcher_stop();
-      config_free();
-      log_close();
-      return 0;
-}
+    watcher_stop();
+    config_free();
+    log_close();
+    return 0;
+};

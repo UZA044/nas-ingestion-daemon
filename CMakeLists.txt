@@ -11,6 +11,8 @@ cmake_minimum_required(VERSION 3.10)
       src/config.c
       src/watcher.c
       src/detector.c
+      src/router.c
+      src/pipeline.c
   )
 
   target_include_directories(nas-daemon PUBLIC
@@ -38,11 +40,13 @@ cmake_minimum_required(VERSION 3.10)
   )
   target_link_libraries(test_detector PRIVATE nas-daemon)
 
+
   # Optional: enable warnings
   if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
       target_compile_options(test_logger PRIVATE -Wall -Wextra -pedantic)
       target_compile_options(test_config_parser PRIVATE -Wall -Wextra -pedantic)
       target_compile_options(test_watcher PRIVATE -Wall -Wextra -pedantic)
       target_compile_options(test_detector PRIVATE -Wall -Wextra -pedantic)
+
 
   endif()
