@@ -67,3 +67,5 @@ FileType detector_identify(const char *path){
     return FILE_UNKNOWN;
 
 }
+
+

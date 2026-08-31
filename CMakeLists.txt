@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
   project(NasIngestionDaemon C)
 
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
   # ---- options -------------------------------------------------
   set(CMAKE_C_STANDARD 11)
   set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -40,6 +41,18 @@ cmake_minimum_required(VERSION 3.10)
   )
   target_link_libraries(test_detector PRIVATE nas-daemon)
 
+  add_executable(test_router
+    tests/test_router.c
+  )
+   target_link_libraries(test_router PRIVATE nas-daemon)
+
+  add_executable(test_pipeline
+    tests/test_pipeline.c
+  )
+  target_link_libraries(test_pipeline PRIVATE nas-daemon)
+
+  
+
 
   # Optional: enable warnings
   if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
@@ -47,6 +60,5 @@ cmake_minimum_required(VERSION 3.10)
       target_compile_options(test_config_parser PRIVATE -Wall -Wextra -pedantic)
       target_compile_options(test_watcher PRIVATE -Wall -Wextra -pedantic)
       target_compile_options(test_detector PRIVATE -Wall -Wextra -pedantic)
-
 
   endif()

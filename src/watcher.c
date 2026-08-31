@@ -1,10 +1,15 @@
 #include "logger.h"
 #include "watcher.h"
+#include "config.h"
+#include "pipeline.h"
 #include <sys/inotify.h>
 #include <signal.h>
 #include <stdatomic.h>
 #include <errno.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 static char *default_watch_path = "/nas/incoming";
 static int g_file_descriptor = -1;

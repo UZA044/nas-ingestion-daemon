@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <sys/inotify.h>
 #include <limits.h>
+#include "config.h"
 
 #define BUF_LEN (1024 * (sizeof(struct inotify_event) + NAME_MAX + 1))
 
