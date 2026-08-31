@@ -14,6 +14,7 @@
 #include "config.h"
 #include "detector.h"
 #include "logger.h"
+#include "db.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,8 +73,16 @@ int main(void) {
             .photos_dir = TEST_PHOTOS,
             .docs_dir = TEST_DOCS,
             .quarantine_dir = TEST_QUAR
+        },
+        .database = {
+            .sqlite_path = "/tmp/test_pipeline.db"
         }
     };
+
+    if (!db_init(&cfg)) {
+        printf("Failed to init DB\n");
+        return 1;
+    }
 
     int failures = 0;
 
@@ -98,7 +107,7 @@ int main(void) {
     pipeline_process(jpg_path, &cfg);
     char expected_jpg[256];
     snprintf(expected_jpg, sizeof(expected_jpg), "%s/test.jpg", TEST_PHOTOS);
-    failures += test_case("pipeline_process(JPG)", file_exists(expected_jpg), "JPG not moved to photos");
+    failures += test_case("pipeline_process(JPG)", file_exists(expected_jpg) && db_count_records() == 1, "JPG not moved or not recorded in DB");
 
     // 2. Test PDF routing
     char pdf_path[256];
@@ -108,7 +117,7 @@ int main(void) {
     pipeline_process(pdf_path, &cfg);
     char expected_pdf[256];
     snprintf(expected_pdf, sizeof(expected_pdf), "%s/test.pdf", TEST_DOCS);
-    failures += test_case("pipeline_process(PDF)", file_exists(expected_pdf), "PDF not moved to docs");
+    failures += test_case("pipeline_process(PDF)", file_exists(expected_pdf) && db_count_records() == 2, "PDF not moved or not recorded in DB");
 
     // 3. Test Unknown routing
     char txt_path[256];
@@ -118,9 +127,10 @@ int main(void) {
     pipeline_process(txt_path, &cfg);
     char expected_txt[256];
     snprintf(expected_txt, sizeof(expected_txt), "%s/test.txt", TEST_QUAR);
-    failures += test_case("pipeline_process(Unknown)", file_exists(expected_txt), "Txt not moved to quarantine");
+    failures += test_case("pipeline_process(Unknown)", file_exists(expected_txt) && db_count_records() == 3, "Txt not moved or not recorded in DB");
 
     cleanup();
+    db_close();
     log_close();
 
     if (failures == 0) {

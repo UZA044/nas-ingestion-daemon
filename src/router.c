@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <errno.h>
 #include <limits.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <libgen.h>
 #include <stdlib.h>
+
+#define DISK_THRESHOLD_BYTES (1024L * 1024L * 1024L) // 1 GB safety limit
 #include <sys/stat.h>
 
 bool router_ensure_dir(const char *path){
@@ -113,7 +116,20 @@ bool router_move_file(const char *src, const char *dest_dir) {
         return false;
     }
 
-    // Get filename from src 
+    // --- Disk Space Guard ---
+    struct statvfs vfs;
+    if (statvfs(dest_dir, &vfs) == 0) {
+        unsigned long long free_space = (unsigned long long)vfs.f_bavail * vfs.f_frsize;
+        if (free_space < DISK_THRESHOLD_BYTES) {
+            log_write(LOG_ERR, "[Router] CRITICAL: Disk space too low (%llu bytes left). Aborting move.", free_space);
+            return false;
+        }
+    } else {
+        log_write(LOG_WARNING, "[Router] Could not check disk space: %s", strerror(errno));
+        // We continue anyway, but log the warning
+    }
+
+    // Get filename from src
     char *src_copy = strdup(src);
     const char *filename = basename(src_copy); 
 
@@ -152,6 +168,9 @@ bool router_move_file(const char *src, const char *dest_dir) {
         if (copy_file(src, dest_path) == 0) {
             unlink(src);
             log_write(LOG_INFO, "[Router] Copied %s → %s (cross-device)", src, dest_path);
+            if (chmod(dest_path, 0664) != 0) {
+                log_write(LOG_ERR, "Failed to set permissions on %s: %s", dest_path, strerror(errno));
+            }
             free(src_copy);
             return true;
         }

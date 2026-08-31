@@ -7,5 +7,6 @@ typedef enum {
 } FileType;
 
 FileType detector_identify(const char *path);
+const char* detector_get_type_string(FileType type);
 
 #endif // DETECTOR_H

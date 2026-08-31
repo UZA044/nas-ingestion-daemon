@@ -1,5 +1,6 @@
 #include "config.h"
 #include "logger.h"
+#include "db.h"
 #include <signal.h>
 #include "watcher.h"
 
@@ -9,6 +10,13 @@ int main(){
     Config *cfg = config_load("../config/nas-ingestion.conf");
     if (cfg == NULL) {
         log_write(LOG_ERR, "Failed to load config");
+        log_close();
+        return 1;
+    }
+
+    if (!db_init(cfg)) {
+        log_write(LOG_ERR, "Failed to initialize database");
+        config_free();
         log_close();
         return 1;
     }
@@ -26,6 +34,7 @@ int main(){
     watcher_start();
 
     watcher_stop();
+    db_close();
     config_free();
     log_close();
     return 0;

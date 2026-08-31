@@ -14,7 +14,11 @@ cmake_minimum_required(VERSION 3.10)
       src/detector.c
       src/router.c
       src/pipeline.c
+      src/db.c
   )
+
+  find_package(SQLite3 REQUIRED)
+  target_link_libraries(nas-daemon PUBLIC SQLite::SQLite3)
 
   target_include_directories(nas-daemon PUBLIC
       ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -51,9 +55,12 @@ cmake_minimum_required(VERSION 3.10)
   )
   target_link_libraries(test_pipeline PRIVATE nas-daemon)
 
+  add_executable(test_db
+    tests/test_db.c
+  )
+  target_link_libraries(test_db PRIVATE nas-daemon)
+
   
-
-
   # Optional: enable warnings
   if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
       target_compile_options(test_logger PRIVATE -Wall -Wextra -pedantic)

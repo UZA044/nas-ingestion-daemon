@@ -68,4 +68,16 @@ FileType detector_identify(const char *path){
 
 }
 
+const char* detector_get_type_string(FileType type) {
+    switch (type) {
+        case FILE_JPEG: return "JPEG";
+        case FILE_PNG:  return "PNG";
+        case FILE_HEIC: return "HEIC";
+        case FILE_PDF:  return "PDF";
+        case FILE_ZIP:  return "ZIP";
+        case FILE_MP4:  return "MP4";
+        default:        return "UNKNOWN";
+    }
+}
+
 
